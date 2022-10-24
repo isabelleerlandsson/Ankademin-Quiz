@@ -1,14 +1,19 @@
 // DARKMODE
+// QuerySelector och ändra scr. 
 let darkMode = document.querySelector("#darkmode-toggle");
+let image = document.querySelector("#Blacktxtimg");
 
 if(darkMode) {
   darkMode.addEventListener("click", e => {
     if(darkMode.checked){
-        document.body.style.background = "black";
-        document.body.style.color = "#FFFFFF";
+        document.body.style.background = "#292929";
+        document.body.style.color = "#F4F4F4";
+        image.src = "img/Whitetxt.png";
     } else{
         document.body.style.background = "#FFFFFF";
         document.body.style.color = "#3a3a3a";
+        image.src = "img/Blacktxt.png";
+
     }
   }
 )}
@@ -67,7 +72,7 @@ let questionsArray = [
   ];
  
 // Frågor_________________________________________________________
-let quizQuestions = document.getElementById("questions");
+// let quizQuestions = document.getElementById("questions");
 let p = document.querySelector("#score");
 let totalScore = 0;
 let maxPoints = 10;
@@ -78,13 +83,19 @@ questionsArray.forEach((obj,i) => {
   p.innerText = obj.question;
   document.body.append(p);
 
-// Svarsalternativ och radio buttons______________________________
+// Svarsalternativ och radio buttons/checkbox______________________________
   obj.choice.forEach((choice) => {
     let p = document.createElement("p");
     p.innerText = choice 
     document.body.append(p); 
     let radioBtn = document.createElement("input");
-    radioBtn.type="radio";
+
+  // Om answer inte har en array har alternativen en radiobutton. Om answer har en array så har alternativen en checkbox. 
+    if (!Array.isArray(obj.answer) ) {
+      radioBtn.type="radio";
+    } else {
+      radioBtn.type = "checkbox";
+    }
     radioBtn.value = choice 
     p.append(radioBtn);
 
@@ -94,29 +105,38 @@ questionsArray.forEach((obj,i) => {
 
 //________________________________________________________________
 
-
 let submitBtn = document.getElementById("submitBtn");
 
 submitBtn.addEventListener("click", () => {
   questionsArray.forEach((question, i) => {
-
-    //För radiobuttons - START
-    let userAnswer = document.querySelector(`[name='selectOneAnswer-${i}']:checked`).value
-    console.log(userAnswer)
-    console.log(question.answer);
     
-    if (userAnswer === question.answer) {
-      totalScore++;
+    // if question === radio --> we count like this. 
+    if(!Array.isArray(question.answer)) {
+      let userAnswer = document.querySelector(`[name='selectOneAnswer-${i}']:checked`).value
+      if (userAnswer === question.answer) {
+        totalScore++;
+      } else {
+      }
+
+    // else question === checkbox --> we count like this.
+    } else {  
+    let isCheckBox = document.querySelectorAll(`[name='selectOneAnswer-${i}']:checked`);
+    let checkboxList = [];
+    isCheckBox.forEach((box) => {
+      checkboxList.push(box.value);
+    });
+
+    let correctUserAnswers = checkboxList.filter(x => {
+      return question.answer.includes(x)
+    })
+
+    if (correctUserAnswers.length === question.answer.length && checkboxList.length === question.answer.length ) {
+        totalScore++;
     }
-    //För radiobuttons - END
-    
-    //För Checkboxar t.ex
-
-
+    }
   })
-
   
-     // RESULTAT
+    // RESULT
   if(totalScore > maxPoints * 0.75) {
     p.style.color = "green";
     p.innerText = `${totalScore}/10. Mycket väl godkänd!`; 
@@ -128,12 +148,5 @@ submitBtn.addEventListener("click", () => {
     p.innerText = `${totalScore}/10. Underkänt!`;
 }
 return totalScore;
-
-  //Hämta värden från inputs
-
-  //Jämför med answer i din questions-array, om de stämmer ge poäng. Annars ej.
-
-  //Skriv ut totala poängen
-
 })
 
