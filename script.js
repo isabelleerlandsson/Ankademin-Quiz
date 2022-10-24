@@ -68,6 +68,10 @@ let questionsArray = [
  
 // Frågor_________________________________________________________
 let quizQuestions = document.getElementById("questions");
+let p = document.querySelector("#score");
+let totalScore = 0;
+let maxPoints = 10;
+
 
 questionsArray.forEach((obj,i) => {
   let p = document.createElement("p");
@@ -89,3 +93,47 @@ questionsArray.forEach((obj,i) => {
 }); 
 
 //________________________________________________________________
+
+
+let submitBtn = document.getElementById("submitBtn");
+
+submitBtn.addEventListener("click", () => {
+  questionsArray.forEach((question, i) => {
+
+    //För radiobuttons - START
+    let userAnswer = document.querySelector(`[name='selectOneAnswer-${i}']:checked`).value
+    console.log(userAnswer)
+    console.log(question.answer);
+    
+    if (userAnswer === question.answer) {
+      totalScore++;
+    }
+    //För radiobuttons - END
+    
+    //För Checkboxar t.ex
+
+
+  })
+
+  
+     // RESULTAT
+  if(totalScore > maxPoints * 0.75) {
+    p.style.color = "green";
+    p.innerText = `${totalScore}/10. Mycket väl godkänd!`; 
+} else if (totalScore > maxPoints * 0.5) {
+    p.style.color = "orange";
+    p.innerText = `${totalScore}/10. Godkänt!`;
+} else {
+    p.style.color = "red";
+    p.innerText = `${totalScore}/10. Underkänt!`;
+}
+return totalScore;
+
+  //Hämta värden från inputs
+
+  //Jämför med answer i din questions-array, om de stämmer ge poäng. Annars ej.
+
+  //Skriv ut totala poängen
+
+})
+
