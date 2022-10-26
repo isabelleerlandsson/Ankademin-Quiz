@@ -73,7 +73,6 @@ let questionsArray = [
     },
   ];
  
-let p = document.querySelector("#score");
 let totalScore = 0;
 let maxPoints = 10;
 
@@ -105,7 +104,14 @@ let radioBtn = document.createElement("input");
 }); 
 //________________________________________________________________
 
-let submitBtn = document.getElementById("submitBtn");
+let submitBtn = document.createElement("button");
+
+submitBtn.innerText = "Rätta";
+document.body.append(submitBtn);
+
+let p = document.querySelector("#score");
+p = document.createElement("h2");
+document.body.append(p)
 
 submitBtn.addEventListener("click", () => {
   questionsArray.forEach((question, i) => {
@@ -115,6 +121,7 @@ submitBtn.addEventListener("click", () => {
       let usercorrectAnswer = document.querySelector(`[name='selectOnecorrectAnswer-${i}']:checked`).value
       if (usercorrectAnswer === question.correctAnswer) {
         totalScore++; 
+        
       } else {
       }
 // else question === checkbox --> we count like this__________
@@ -124,7 +131,7 @@ submitBtn.addEventListener("click", () => {
   isCheckBox.forEach((box) => {
     checkboxList.push(box.value);
   });
-
+  
   let correctUsercorrectAnswers = checkboxList.filter(x => {
     return question.correctAnswer.includes(x)
   })
@@ -138,13 +145,13 @@ submitBtn.addEventListener("click", () => {
 // RESULT______________________________________________________
      if(totalScore > maxPoints * 0.75) {
       p.style.color = "#1C8B0A";
-      p.innerText = `${totalScore}/10. Mycket väl godkänd!`; 
+      p.innerText = `${totalScore}/10. Vilken stjärna!`; 
   } else if (totalScore > maxPoints * 0.5) {
       p.style.color = "#BE6716";
-      p.innerText = `${totalScore}/10. Godkänt!`;
+      p.innerText = `${totalScore}/10. Inte så tokigt!`;
   } else {
       p.style.color = "#B71B1B";
-      p.innerText = `${totalScore}/10. Underkänt!`;
+      p.innerText = `${totalScore}/10. Bättre kan du!`;
   }
   return totalScore;
   
